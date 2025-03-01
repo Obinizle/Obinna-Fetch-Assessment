@@ -1,6 +1,7 @@
 //
-Assumptions: Top 10 users based on the following assumptions
+Question: Who are Fetch’s power users?
 
+Assumptions: Top 10 users based on the following assumptions
 Fetch’s power users can be identified based on various engagement and spending metrics such as:
 	- Users who frequently submit receipts.
 	- Users with the highest FINAL_SALE value.
