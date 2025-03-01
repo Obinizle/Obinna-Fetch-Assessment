@@ -1,3 +1,6 @@
+// At what percent has Fetch grown year over year? 
+Assumption: The transcation data only exist for 2024 and as such I calculated user growth year on year instead since the data span accross multiple years. //
+
 WITH YearlyUserCount AS (
 	SELECT 
 		YEAR(CREATED_DATE) AS year,
