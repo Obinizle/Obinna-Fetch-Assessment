@@ -1,0 +1,20 @@
+What are the top 5 brands by receipts scanned among users 21 and over?
+
+Query:
+
+SELECT 
+    p.brand, 
+    COUNT(t.receipt_id) AS receipts_scanned
+FROM 
+    Transactions t
+JOIN 
+    Users u ON t.user_id = u.id
+JOIN 
+    Products p ON p.barcode = t.barcode
+WHERE 
+    AGE(NOW(), DATE_FORMAT(birth_date, '%Y-%m-%d %H:%i:%s'))>= 21
+GROUP BY 
+    p.brand
+ORDER BY 
+    COUNT(t.receipt_id) DESC
+LIMIT 5;

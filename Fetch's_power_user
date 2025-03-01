@@ -1,0 +1,40 @@
+//
+Assumptions: Top 10 users based on the following assumptions
+
+Fetch’s power users can be identified based on various engagement and spending metrics such as:
+	- Users who frequently submit receipts.
+	- Users with the highest FINAL_SALE value.
+	- Users who shop across multiple stores.
+	- Users who have been using Fetch for a long time and maintain regular activity. //
+
+
+WITH UserMetrics AS (
+    SELECT 
+        T.USER_ID,
+        SUM(T.FINAL_SALE) AS total_spending,
+        COUNT(T.RECEIPT_ID) AS purchase_frequency,
+        COUNT(DISTINCT T.STORE_NAME) AS unique_stores
+    FROM TRANSACTION_TAKEHOME T
+    GROUP BY T.USER_ID
+),
+UserAge AS (
+    SELECT 
+        ID AS USER_ID,
+        CREATED_DATE,
+        DATEDIFF(day, CURDATE(), CREATED_DATE) AS account_age_days
+    FROM USERS_TAKEHOME
+)
+SELECT 
+    U.USER_ID,
+    M.total_spending,
+    M.purchase_frequency,
+    M.unique_stores,
+    U.account_age_days,
+    (RANK() OVER (ORDER BY M.total_spending DESC) +
+     RANK() OVER (ORDER BY M.purchase_frequency DESC) +
+     RANK() OVER (ORDER BY M.unique_stores DESC) +
+     RANK() OVER (ORDER BY U.account_age_days DESC)) AS score
+FROM UserMetrics M
+JOIN UserAge U ON M.USER_ID = U.USER_ID
+ORDER BY score ASC
+LIMIT 10;

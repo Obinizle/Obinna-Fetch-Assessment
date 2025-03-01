@@ -1,0 +1,13 @@
+WITH DipsSalsaSales AS (
+    SELECT 
+        P.BRAND AS BRAND, 
+        SUM(T.FINAL_SALE) AS total_sales
+    FROM TRANSACTION_TAKEHOME T
+    JOIN PRODUCTS_TAKEHOME P ON T.BARCODE = P.BARCODE
+    WHERE P.CATEGORY_2 = 'Dips & Salsa'
+    GROUP BY P.BRAND
+)
+SELECT BRAND
+FROM DipsSalsaSales
+ORDER BY total_sales DESC
+LIMIT 1;

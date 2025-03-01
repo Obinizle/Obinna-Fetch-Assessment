@@ -1,0 +1,20 @@
+What are the top 5 brands by sales among users that have had their account for at least six months?
+
+Solution Query:
+
+SELECT 
+    p.brand,
+    SUM(t.final_sale) AS sales
+FROM 
+    Transactions t
+JOIN 
+    Users u ON t.user_id = u.id
+JOIN 
+    Products p ON t.barcode = p.barcode
+WHERE 
+    DATE_FORMAT(u.created_date, '%Y-%m-%d %H:%i:%s') <= CURDATE() - INTERVAL 6 MONTH
+GROUP BY 
+    b.brand_name
+ORDER BY 
+    SUM(t.final_sale) DESC
+LIMIT 5;

@@ -1,0 +1,12 @@
+WITH YearlyUserCount AS (
+	SELECT 
+		YEAR(CREATED_DATE) AS year,
+			COUNT(USER_ID) AS user_count
+	FROM USER
+	GROUP BY 1
+	ORDER BY YEAR DESC
+)
+SELECT
+	year,
+	user_count,
+	(user_count - LAG(user_count) OVER (ORDER BY year))/ LAG(user_count) OVER (ORDER BY year) * 100 AS YoY_Growth
