@@ -1,3 +1,5 @@
+// What is the percentage of sales in the Health & Wellness category by generation? //
+
 WITH UserGenerations AS (
     SELECT 
         ID AS USER_ID,
