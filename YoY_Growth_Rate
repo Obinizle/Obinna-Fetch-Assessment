@@ -1,15 +1,21 @@
 // At what percent has Fetch grown year over year? 
 Assumption: The transcation data only exist for 2024 and as such I calculated user growth year on year instead since the data span accross multiple years. //
 
-WITH YearlyUserCount AS (
+WITH UserYearlyCount AS (
 	SELECT 
 		YEAR(CREATED_DATE) AS year,
-			COUNT(USER_ID) AS user_count
-	FROM USER
+			COUNT(ID) AS user_count
+	FROM USERS
 	GROUP BY 1
 	ORDER BY YEAR DESC
 )
-SELECT
-	year,
-	user_count,
-	(user_count - LAG(user_count) OVER (ORDER BY year))/ LAG(user_count) OVER (ORDER BY year) * 100 AS YoY_Growth
+UserGrowthRate AS 
+	(
+	SELECT 
+		year,
+		user_count,
+		LAG(user_count) OVER (ORDER BY year) AS previous_year_count
+		(user_count - LAG(user_count) OVER (ORDER BY year))/ LAG(user_count) OVER (ORDER BY year) * 100 AS YoY_Growth
+	FROM UserYearlyCount
+)
+SELECT * FROM UserGrowthRate WHERE previous_year_count IS NOT NULL;
